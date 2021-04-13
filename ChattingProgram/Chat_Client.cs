@@ -155,5 +155,22 @@ namespace ChattingProgram
                 btSend_Click(sender, e);
             }
         }
+
+        private void sendToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (sock.Connected)
+                {
+                    string str = tbSend.SelectedText;
+                    sock.Send(Encoding.Default.GetBytes(str));
+                }
+
+            }
+            catch (SocketException e1)
+            {
+                tbReceive.Text += "연결을 확인하세요.\r\n";
+            }
+        }
     }
 }

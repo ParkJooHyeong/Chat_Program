@@ -29,10 +29,10 @@ namespace ChattingProgram
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.sbIPPORT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbExcep = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.label2 = new System.Windows.Forms.Label();
@@ -44,6 +44,9 @@ namespace ChattingProgram
             this.label1 = new System.Windows.Forms.Label();
             this.tbPort = new System.Windows.Forms.TextBox();
             this.tbIP = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.sendToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -53,6 +56,7 @@ namespace ChattingProgram
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -79,14 +83,6 @@ namespace ChattingProgram
             this.tbExcep.ForeColor = System.Drawing.SystemColors.Window;
             this.tbExcep.Name = "tbExcep";
             this.tbExcep.Size = new System.Drawing.Size(100, 17);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
             // 
             // splitContainer1
             // 
@@ -141,6 +137,7 @@ namespace ChattingProgram
             // 
             // tbSend
             // 
+            this.tbSend.ContextMenuStrip = this.contextMenuStrip1;
             this.tbSend.Location = new System.Drawing.Point(4, 31);
             this.tbSend.Multiline = true;
             this.tbSend.Name = "tbSend";
@@ -212,6 +209,28 @@ namespace ChattingProgram
             this.tbIP.TabIndex = 1;
             this.tbIP.Text = "192.168.35.94";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sendToolStripMenuItem1});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(102, 26);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // sendToolStripMenuItem1
+            // 
+            this.sendToolStripMenuItem1.Name = "sendToolStripMenuItem1";
+            this.sendToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.sendToolStripMenuItem1.Text = "Send";
+            this.sendToolStripMenuItem1.Click += new System.EventHandler(this.sendToolStripMenuItem1_Click);
+            // 
             // Chat_Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -238,6 +257,7 @@ namespace ChattingProgram
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -246,7 +266,6 @@ namespace ChattingProgram
         #endregion
 
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ToolStripStatusLabel sbIPPORT;
@@ -260,6 +279,9 @@ namespace ChattingProgram
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btSend;
         private System.Windows.Forms.ToolStripStatusLabel tbExcep;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem sendToolStripMenuItem1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
     }
 }
 
