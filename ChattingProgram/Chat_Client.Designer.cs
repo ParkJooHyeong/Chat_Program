@@ -30,20 +30,20 @@ namespace ChattingProgram
         private void InitializeComponent()
         {
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.sbIPPORT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tbExcep = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.sbIPPORT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tbSend = new System.Windows.Forms.TextBox();
-            this.tbReceive = new System.Windows.Forms.TextBox();
-            this.tbIP = new System.Windows.Forms.TextBox();
-            this.tbPort = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnConnect = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.tbSend = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.tbReceive = new System.Windows.Forms.TextBox();
             this.btSend = new System.Windows.Forms.Button();
-            this.tbExcep = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbPort = new System.Windows.Forms.TextBox();
+            this.tbIP = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -65,6 +65,20 @@ namespace ChattingProgram
             this.statusStrip1.Size = new System.Drawing.Size(800, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // sbIPPORT
+            // 
+            this.sbIPPORT.AutoSize = false;
+            this.sbIPPORT.Name = "sbIPPORT";
+            this.sbIPPORT.Size = new System.Drawing.Size(150, 17);
+            // 
+            // tbExcep
+            // 
+            this.tbExcep.AutoSize = false;
+            this.tbExcep.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.tbExcep.ForeColor = System.Drawing.SystemColors.Window;
+            this.tbExcep.Name = "tbExcep";
+            this.tbExcep.Size = new System.Drawing.Size(100, 17);
             // 
             // menuStrip1
             // 
@@ -115,64 +129,6 @@ namespace ChattingProgram
             this.splitContainer2.SplitterDistance = 291;
             this.splitContainer2.TabIndex = 0;
             // 
-            // sbIPPORT
-            // 
-            this.sbIPPORT.AutoSize = false;
-            this.sbIPPORT.Name = "sbIPPORT";
-            this.sbIPPORT.Size = new System.Drawing.Size(150, 17);
-            // 
-            // tbSend
-            // 
-            this.tbSend.Location = new System.Drawing.Point(4, 31);
-            this.tbSend.Multiline = true;
-            this.tbSend.Name = "tbSend";
-            this.tbSend.Size = new System.Drawing.Size(284, 373);
-            this.tbSend.TabIndex = 0;
-            // 
-            // tbReceive
-            // 
-            this.tbReceive.Location = new System.Drawing.Point(3, 31);
-            this.tbReceive.Multiline = true;
-            this.tbReceive.Name = "tbReceive";
-            this.tbReceive.Size = new System.Drawing.Size(292, 373);
-            this.tbReceive.TabIndex = 1;
-            // 
-            // tbIP
-            // 
-            this.tbIP.Location = new System.Drawing.Point(68, 17);
-            this.tbIP.Multiline = true;
-            this.tbIP.Name = "tbIP";
-            this.tbIP.Size = new System.Drawing.Size(100, 23);
-            this.tbIP.TabIndex = 1;
-            this.tbIP.Text = "192.168.35.94";
-            // 
-            // tbPort
-            // 
-            this.tbPort.Location = new System.Drawing.Point(68, 46);
-            this.tbPort.Name = "tbPort";
-            this.tbPort.Size = new System.Drawing.Size(50, 21);
-            this.tbPort.TabIndex = 2;
-            this.tbPort.Text = "8080";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 12);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Server";
-            // 
-            // btnConnect
-            // 
-            this.btnConnect.Location = new System.Drawing.Point(68, 84);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(75, 23);
-            this.btnConnect.TabIndex = 4;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -182,6 +138,15 @@ namespace ChattingProgram
             this.label2.Size = new System.Drawing.Size(62, 12);
             this.label2.TabIndex = 1;
             this.label2.Text = "[ Send ]";
+            // 
+            // tbSend
+            // 
+            this.tbSend.Location = new System.Drawing.Point(4, 31);
+            this.tbSend.Multiline = true;
+            this.tbSend.Name = "tbSend";
+            this.tbSend.Size = new System.Drawing.Size(284, 373);
+            this.tbSend.TabIndex = 0;
+            this.tbSend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSend_KeyDown);
             // 
             // label3
             // 
@@ -193,6 +158,14 @@ namespace ChattingProgram
             this.label3.TabIndex = 2;
             this.label3.Text = "[ Receive ]";
             // 
+            // tbReceive
+            // 
+            this.tbReceive.Location = new System.Drawing.Point(3, 31);
+            this.tbReceive.Multiline = true;
+            this.tbReceive.Name = "tbReceive";
+            this.tbReceive.Size = new System.Drawing.Size(292, 373);
+            this.tbReceive.TabIndex = 1;
+            // 
             // btSend
             // 
             this.btSend.Location = new System.Drawing.Point(38, 143);
@@ -203,12 +176,41 @@ namespace ChattingProgram
             this.btSend.UseVisualStyleBackColor = true;
             this.btSend.Click += new System.EventHandler(this.btSend_Click);
             // 
-            // tbExcep
+            // btnConnect
             // 
-            this.tbExcep.AutoSize = false;
-            this.tbExcep.ForeColor = System.Drawing.SystemColors.Window;
-            this.tbExcep.Name = "tbExcep";
-            this.tbExcep.Size = new System.Drawing.Size(100, 17);
+            this.btnConnect.Location = new System.Drawing.Point(68, 84);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect.TabIndex = 4;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(21, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 12);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Server";
+            // 
+            // tbPort
+            // 
+            this.tbPort.Location = new System.Drawing.Point(68, 46);
+            this.tbPort.Name = "tbPort";
+            this.tbPort.Size = new System.Drawing.Size(50, 21);
+            this.tbPort.TabIndex = 2;
+            this.tbPort.Text = "8080";
+            // 
+            // tbIP
+            // 
+            this.tbIP.Location = new System.Drawing.Point(68, 17);
+            this.tbIP.Multiline = true;
+            this.tbIP.Name = "tbIP";
+            this.tbIP.Size = new System.Drawing.Size(100, 23);
+            this.tbIP.TabIndex = 1;
+            this.tbIP.Text = "192.168.35.94";
             // 
             // Chat_Client
             // 

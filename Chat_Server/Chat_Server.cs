@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Clibrary;
-using myLibrary;
+
 
 namespace Chat_Server
 {
@@ -23,84 +23,93 @@ namespace Chat_Server
         }
         TcpListener listener = null;
         Thread threadServer = null;
+        Thread threadRead = null;
+        TcpClient tcp = null;
+        string mainMess;
 
-
-        delegate void CV();
+        delegate void CV(string str);
 
        
-        private void AddText()
+        private void AddText(string str)
         {
             if (tbReceive.InvokeRequired)
             {
                 CV cb = new CV(AddText);
                 
-                Invoke(cb);
+                Invoke(cb, new object[] { str});
             }
             else
             {
-                tbReceive.Text+=mainMess;
+                tbReceive.Text+=str+"\r\n";
             }
 
         }
         private void btnStart_Click(object sender, EventArgs e)
         {
-            
+            if (listener == null)
+            {
+                listener = new TcpListener(int.Parse(tbPort.Text));
+                listener.Start();
+            }
+
             if (threadServer == null)
             {
                 threadServer = new Thread(ServerProcess);
                 threadServer.Start();
-            }
-            else
-            {
-                threadServer.Resume();
+                tbConnect.Text = "Connect Client";
+                tbConnect.BackColor = Color.Blue;
+                threadRead = new Thread(Readprocess);
             }
 
-           
             timer1.Start();
         }
-
         private void ServerProcess()
         {
             
             while (true)
             {
-                if (listener == null)
-                {
-                    listener = new TcpListener(int.Parse(tbPort.Text));
-                    listener.Start();
-                }
                 if (listener.Pending())
                 {
-                    Socket sock = listener.AcceptSocket();
-                    byte[] bArr = new byte[sock.Available];
-                    int n = sock.Receive(bArr, 0, sock.Available, SocketFlags.None);
-                    mainMess = Encoding.Default.GetString(bArr, 0, n);
-                    AddText();
+
+                    tcp = listener.AcceptTcpClient();
+                    IPEndPoint ep = (IPEndPoint)tcp.Client.RemoteEndPoint;
+                    sbIPPORT.Text = $"{myLib.GetToken(ep.ToString(), ':', 0)}";
+
+                    threadRead.Start();
                    
-
-                    IPEndPoint ep = (IPEndPoint)sock.RemoteEndPoint;
-                    sbIPPORT.Text = $"{myLib.GetToken(sock.RemoteEndPoint.ToString(), ':', 0)}";
-
-
                 }
+                Thread.Sleep(100);
 
             }
 
         }
-        //void ReadProcess()
-        //{
-        //    if(tcp!=null)
-        //    {
-        //        NetworkStream ns = tcp.GetStream();
-        //        byte[] bArr = 
-        //    }        
-        //}
-        string mainMess;
+        void Readprocess()
+        {
+            if (tcp != null)
+            {
+                NetworkStream ns = tcp.GetStream();
+                int n;
+                byte[] barr = new byte[1024];
+                while (true)
+                {
+                    while (ns.DataAvailable)
+                    {
+                        while((n = ns.Read(barr, 0, barr.Length)) > 0)
+                        {
+                            string timer = System.DateTime.Now.ToString("HH:mm:ss");
+                            AddText($"[{timer}] {Encoding.Default.GetString(barr, 0, n)}");
+                        }
+
+                    }
+                }
+            }
+        }
 
         private void Chat_Server_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (threadServer != null){
                 threadServer.Abort();
+                threadRead.Abort();
             }
             
             timer1.Stop();
@@ -110,6 +119,35 @@ namespace Chat_Server
         {
             tbReceive.Text += mainMess;
             mainMess = "";
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            if (tcp != null)
+            {
+                NetworkStream ns = tcp.GetStream();
+                if (tbSend.Text != "")
+                {
+                    string str = tbSend.Text;
+                    string[] sArr = str.Split('\r');
+                    string sLast = sArr.Last();
+                    byte[] bArr = Encoding.Default.GetBytes(sLast);
+                    ns.Write(bArr, 0, bArr.Length);
+                }
+
+
+            }
+        }
+
+        
+
+        private void tbSend_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSend_Click(sender, e);
+            }
+
         }
     }
 }

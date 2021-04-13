@@ -27,11 +27,11 @@ namespace ChattingProgram
             {
                 cbAddText cb = new cbAddText(AddText);
                 object[] oArr = { str };
-                Invoke(cb);
+                Invoke(cb, oArr);
             }
             else
             {
-                tbReceive.AppendText(str);
+                tbReceive.Text += str + "\r\n";
             }
             
         }
@@ -66,12 +66,27 @@ namespace ChattingProgram
                 sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             }
+            else
+            {
+                sock.Close();
+                sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //threadClient.Abort();
+                tbExcep.Text = "Disconnect server";
+                tbExcep.BackColor = Color.Gray;
+            }
             try
             {
+                //Thread conth = new Thread(ConnProcess);
+                //conth.Start();
                 sock.Connect(tbIP.Text, int.Parse(tbPort.Text));
                 sbIPPORT.Text = $"{sock.RemoteEndPoint.ToString()}";
                 tbExcep.Text = "Connect Success";
                 tbExcep.BackColor = Color.Blue;
+                if (threadClient == null)
+                {
+                    threadClient = new Thread(ClientProcess);
+                    threadClient.Start();
+                }
             }
             catch(Exception err)
             {
@@ -80,20 +95,27 @@ namespace ChattingProgram
             }
             
             
-            if (threadClient == null)
-            {
-                threadClient = new Thread(ClientProcess);
-                threadClient.Start();
-            }
+            
         }
 
         private void btSend_Click(object sender, EventArgs e)
         {
 
-            string str = tbSend.Text;
-            string[] sArr = str.Split('\r');
-            string sLast = sArr.Last();
-            sock.Send(Encoding.Default.GetBytes(sLast));
+            try
+            {
+                if (sock.Connected)
+                {
+                    string str = tbSend.Text;
+                    string[] sArr = str.Split('\r');
+                    string sLast = sArr.Last();
+                    sock.Send(Encoding.Default.GetBytes(sLast));
+                }
+
+            }catch(SocketException e1)
+            {
+                tbReceive.Text += "연결을 확인하세요.\r\n";
+            }
+            
         }
         
         private void ClientProcess()
@@ -105,7 +127,8 @@ namespace ChattingProgram
                 {
                     byte[] bArr = new byte[n];
                     sock.Receive(bArr);
-                    AddText(Encoding.Default.GetString(bArr));
+                    string timer = System.DateTime.Now.ToString("HH:mm:ss");
+                    AddText($"[{timer}] {Encoding.Default.GetString(bArr, 0, n)}");
                 }
 
             }
@@ -121,6 +144,16 @@ namespace ChattingProgram
             ini.WriteString("Form", "LocationY", $"{Location.Y}");
             ini.WriteString("Form", "SizeX", $"{Size.Width}");
             ini.WriteString("Form", "SizeY", $"{Size.Height}");
+            if (threadClient != null) threadClient.Abort();
+            
+        }
+
+        private void tbSend_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btSend_Click(sender, e);
+            }
         }
     }
 }
