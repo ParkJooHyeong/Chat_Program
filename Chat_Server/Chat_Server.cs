@@ -83,8 +83,8 @@ namespace Chat_Server
             }
 
         }
-        void Readprocess()
-        {
+        void Readprocess()        //using network steam
+        {   
             if (tcp != null)
             {
                 NetworkStream ns = tcp.GetStream();
