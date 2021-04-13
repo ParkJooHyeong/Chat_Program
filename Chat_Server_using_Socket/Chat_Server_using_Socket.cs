@@ -102,12 +102,22 @@ namespace Chat_Server_using_Socket
 
         void SendText(string str)
         {
-            socket.Send(Encoding.Default.GetBytes(str));
+            try
+            {
+                socket.Send(Encoding.Default.GetBytes(str));
+            }
+            catch(NullReferenceException e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
+           
+
         }
         // Send button in Pop-up menu 
         private void sendToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SendText(tbSend.SelectedText);
+
         }
 
         private void menu_Stop_Click(object sender, EventArgs e)
