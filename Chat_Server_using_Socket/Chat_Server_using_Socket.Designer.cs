@@ -87,7 +87,7 @@ namespace Chat_Server_using_Socket
             // menu_Start
             // 
             this.menu_Start.Name = "menu_Start";
-            this.menu_Start.Size = new System.Drawing.Size(143, 22);
+            this.menu_Start.Size = new System.Drawing.Size(180, 22);
             this.menu_Start.Text = "Start Server";
             this.menu_Start.Click += new System.EventHandler(this.menu_Start_Click);
             // 
@@ -101,13 +101,14 @@ namespace Chat_Server_using_Socket
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(140, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
             // 
             // menu_Exit
             // 
             this.menu_Exit.Name = "menu_Exit";
-            this.menu_Exit.Size = new System.Drawing.Size(143, 22);
+            this.menu_Exit.Size = new System.Drawing.Size(180, 22);
             this.menu_Exit.Text = "Exit Program";
+            this.menu_Exit.Click += new System.EventHandler(this.menu_Exit_Click);
             // 
             // menu_Edit
             // 
@@ -166,7 +167,7 @@ namespace Chat_Server_using_Socket
             this.sbStatus.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.sbStatus.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.sbStatus.Name = "sbStatus";
-            this.sbStatus.Size = new System.Drawing.Size(100, 17);
+            this.sbStatus.Size = new System.Drawing.Size(110, 17);
             // 
             // sbIPport
             // 
@@ -218,6 +219,7 @@ namespace Chat_Server_using_Socket
             this.tbSend.Name = "tbSend";
             this.tbSend.Size = new System.Drawing.Size(242, 373);
             this.tbSend.TabIndex = 0;
+            this.tbSend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSend_KeyDown);
             // 
             // tbReceive
             // 

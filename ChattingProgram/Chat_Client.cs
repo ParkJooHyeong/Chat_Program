@@ -20,6 +20,13 @@ namespace ChattingProgram
             InitializeComponent();
         }
 
+        iniFile ini = new iniFile(".\\ChatClient.ini");
+        Socket sock;
+        Thread threadClient;
+        string IP;
+        string Port;
+        int x1, x2, y1, y2;        
+
         delegate void cbAddText(string str);
         private void AddText(string str)
         {
@@ -35,12 +42,11 @@ namespace ChattingProgram
             }
             
         }
-        iniFile ini = new iniFile(".\\ChatClient.ini");
+
         private void Chat_Client_Load(object sender, EventArgs e)
         {
-           tbIP.Text=ini.GetString("Server", "IP", "192.168.35.94");
-           tbPort.Text=ini.GetString("Server", "PORT", "8080");
-            int x1, x2, y1, y2;
+           IP=ini.GetString("Server", "IP", "192.168.35.94");
+           Port=ini.GetString("Server", "PORT", "8080");
             x1 = int.Parse(ini.GetString("Form", "LocationX", "0"));
             y1 = int.Parse(ini.GetString("Form", "LocationY", "0"));
             this.Location = new Point(x1, y1);
@@ -49,17 +55,7 @@ namespace ChattingProgram
             this.Size = new Size(x2, y2);
         }
 
-        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-            int size1 = 200;
-           // splitContainer1.SplitterDistance = splitContainer1.Size.Width - size1;
-
-        }
-
-        Socket sock;
-        Thread threadClient;
-
-        private void btnConnect_Click(object sender, EventArgs e)
+        void ConnectionServer()
         {
             if (sock == null)
             {
@@ -70,32 +66,27 @@ namespace ChattingProgram
             {
                 sock.Close();
                 sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                //threadClient.Abort();
-                tbExcep.Text = "Disconnect server";
-                tbExcep.BackColor = Color.Gray;
+
             }
             try
             {
-                //Thread conth = new Thread(ConnProcess);
-                //conth.Start();
-                sock.Connect(tbIP.Text, int.Parse(tbPort.Text));
+                sock.Connect(IP, int.Parse(Port));
+                tbReceive.Text += $"[{System.DateTime.Now.ToString("yyyy-MM-dd")}] Connected with Server\r\n";
                 sbIPPORT.Text = $"{sock.RemoteEndPoint.ToString()}";
                 tbExcep.Text = "Connect Success";
                 tbExcep.BackColor = Color.Blue;
                 if (threadClient == null)
                 {
                     threadClient = new Thread(ClientProcess);
+                    threadClient.IsBackground = true;
                     threadClient.Start();
                 }
             }
-            catch(Exception err)
+            catch (Exception err)
             {
-                tbExcep.Text = "Connect Fail";
+                tbExcep.Text = "Fail to connect";
                 tbExcep.BackColor = Color.Red;
             }
-            
-            
-            
         }
 
         private void btSend_Click(object sender, EventArgs e)
@@ -109,6 +100,8 @@ namespace ChattingProgram
                     string[] sArr = str.Split('\r');
                     string sLast = sArr.Last();
                     sock.Send(Encoding.Default.GetBytes(sLast));
+                    string timer = System.DateTime.Now.ToString("HH:mm:ss");
+                    AddText($"[발신][{timer}] {sLast}");
                 }
 
             }catch(SocketException e1)
@@ -120,31 +113,84 @@ namespace ChattingProgram
         
         private void ClientProcess()
         {
-            while (true)
+            if (sock != null)
             {
-                int n = sock.Available;
-                if (n > 0)
+                while (true)
                 {
-                    byte[] bArr = new byte[n];
-                    sock.Receive(bArr);
-                    string timer = System.DateTime.Now.ToString("HH:mm:ss");
-                    AddText($"[{timer}] {Encoding.Default.GetString(bArr, 0, n)}");
-                }
+                    int n = sock.Available;
+                    if (sock != null && n > 0)
+                    {
+                        byte[] bArr = new byte[n];
+                        sock.Receive(bArr);
+                        string timer = System.DateTime.Now.ToString("HH:mm:ss");
+                        AddText($"[수신][{timer}] {Encoding.Default.GetString(bArr)}");
+                    }
 
+                }
             }
+            else
+            {
+                tbExcep.Text = "Check connection";
+                tbExcep.BackColor = Color.Red;
+                tbReceive.Text += "연결을 확인하세요.\r\n";
+            }
+
 
 
         }
 
+        private void menu_EndClient_Click(object sender, EventArgs e)
+        {
+            if (threadClient != null)
+            {
+                threadClient.Abort();
+                sock.Shutdown(SocketShutdown.Both);
+                sock.Close();
+                tbReceive.Text += $"[{System.DateTime.Now.ToString("yyyy-MM-dd")}] Disconnected with Server\r\n";
+                tbExcep.Text = "Disconnect Server";
+                tbExcep.BackColor = Color.Red;
+            }
+
+        }
+
+        private void connectionInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show($"[IP] {IP}\r\n[Port] {Port}","IP and Port info");
+        }
+
+        private void editConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Setting set = new Setting(IP, Port);
+            DialogResult result = set.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                IP = set.setIP();
+                Port = set.setPort();
+            }
+            set.Close();
+
+        }
+
+        private void menu_Send_Click(object sender, EventArgs e)
+        {
+            btSend_Click(sender, e);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         private void Chat_Client_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ini.WriteString("Server", "IP", tbIP.Text);
-            ini.WriteString("Server", "PORT", tbPort.Text);
+            ini.WriteString("Server", "IP", IP);
+            ini.WriteString("Server", "PORT", Port);
             ini.WriteString("Form", "LocationX", $"{Location.X}");
             ini.WriteString("Form", "LocationY", $"{Location.Y}");
             ini.WriteString("Form", "SizeX", $"{Size.Width}");
             ini.WriteString("Form", "SizeY", $"{Size.Height}");
-            if (threadClient != null) threadClient.Abort();
+            //if (threadClient != null) threadClient.Abort();
+
             
         }
 
@@ -158,19 +204,8 @@ namespace ChattingProgram
 
         private void sendToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (sock.Connected)
-                {
-                    string str = tbSend.SelectedText;
-                    sock.Send(Encoding.Default.GetBytes(str));
-                }
 
-            }
-            catch (SocketException e1)
-            {
-                tbReceive.Text += "연결을 확인하세요.\r\n";
-            }
+            ConnectionServer();
         }
     }
 }

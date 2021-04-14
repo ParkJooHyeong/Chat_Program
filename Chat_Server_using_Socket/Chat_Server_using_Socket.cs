@@ -50,26 +50,58 @@ namespace Chat_Server_using_Socket
             if (threadServer == null)
             {
                 threadServer = new Thread(ServerProcess);
+                threadServer.IsBackground = true;
                 threadServer.Start();
             }
 
             if (threadRead == null)
+            {
                 threadRead = new Thread(ReadProcess);
-
-
+                threadRead.IsBackground = true;
+            }
 
         }
+        bool Pending = false; // 외부로부터의 서버요청 수신.
+        IAsyncResult ar;
+
+        private void onAccept(IAsyncResult iar)
+        {
+            Pending = true;
+            ar = iar;
+        }
+        private Socket accpetSocket()
+        {
+            Socket sock1 = sockServer.EndAccept(ar);
+            sockServer.BeginAccept(new AsyncCallback(onAccept), null);
+            Pending = false;
+            return sock1;
+        }
+
         void ServerProcess()
         {
             IPAddress ip_p = new IPAddress(IP);
             IPEndPoint ep = new IPEndPoint(ip_p, port_num);
             sockServer.Bind(ep);
             sockServer.Listen(1024 * 50);
-            //listener.AcceptTcpClient();
+            IAsyncResult result = sockServer.BeginAccept(new AsyncCallback(onAccept), null);
+
+
             while (true)
             {
-                socket = sockServer.Accept();
-                threadRead.Start();
+                if (Pending)
+                {
+                    socket = accpetSocket();
+                   // threadRead.Start();
+                    if (threadRead != null)
+                    {
+                        threadRead.Abort(); threadRead = null;
+                    }
+                    threadRead = new Thread(ReadProcess);
+                    threadRead.Start();
+                }
+                Thread.Sleep(100);
+                //socket = sockServer.BeginAccept();   //Create channel(session)
+                //threadRead.Start();
             }
 
         }
@@ -104,13 +136,24 @@ namespace Chat_Server_using_Socket
         {
             try
             {
-                socket.Send(Encoding.Default.GetBytes(str));
+
+                string strt = tbSend.Text;
+                string[] sArr = strt.Split('\r');
+                string sLast = sArr.Last();
+                socket.Send(Encoding.Default.GetBytes(sLast));
+
             }
             catch(NullReferenceException e1)
             {
                 MessageBox.Show(e1.Message);
             }
-           
+            catch (Exception )
+            {
+                MessageBox.Show("Client 연결을 확인하세요.");
+                sbStatus.Text = "Check connection";
+                sbStatus.BackColor = Color.Red;
+            }
+
 
         }
         // Send button in Pop-up menu 
@@ -124,6 +167,19 @@ namespace Chat_Server_using_Socket
         {
             sockServer.Close();
             socket.Close();
+        }
+
+        private void menu_Exit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void tbSend_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SendText(tbSend.Text);
+            }
         }
     }
 }
