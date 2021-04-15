@@ -8,26 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ChattingProgram
+namespace Chat_Server_using_Socket
 {
-    public partial class Setting : Form
+    public partial class PortSet : Form
     {
-        public Setting(string ip, string port)
+        public PortSet(string port)
         {
             InitializeComponent();
-            tbIPnum.Text = ip;
-            tbPortnum.Text = port;
+            textBox1.Text = port;
         }
 
-        
-
-        public string setIP()
-        {
-            return tbIPnum.Text;
-        }
         public string setPort()
         {
-              return tbPortnum.Text;
+            return textBox1.Text;
         }
     }
 }

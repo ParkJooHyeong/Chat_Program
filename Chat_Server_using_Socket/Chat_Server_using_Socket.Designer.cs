@@ -47,16 +47,13 @@ namespace Chat_Server_using_Socket
             this.sbIPport = new System.Windows.Forms.ToolStripStatusLabel();
             this.cmn_Send = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sendToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tbSend = new System.Windows.Forms.TextBox();
             this.tbReceive = new System.Windows.Forms.TextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.cmn_Send.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -69,7 +66,7 @@ namespace Chat_Server_using_Socket
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(507, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(299, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -87,26 +84,26 @@ namespace Chat_Server_using_Socket
             // menu_Start
             // 
             this.menu_Start.Name = "menu_Start";
-            this.menu_Start.Size = new System.Drawing.Size(180, 22);
+            this.menu_Start.Size = new System.Drawing.Size(143, 22);
             this.menu_Start.Text = "Start Server";
             this.menu_Start.Click += new System.EventHandler(this.menu_Start_Click);
             // 
             // menu_Stop
             // 
             this.menu_Stop.Name = "menu_Stop";
-            this.menu_Stop.Size = new System.Drawing.Size(180, 22);
+            this.menu_Stop.Size = new System.Drawing.Size(143, 22);
             this.menu_Stop.Text = "Stop Server";
             this.menu_Stop.Click += new System.EventHandler(this.menu_Stop_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(140, 6);
             // 
             // menu_Exit
             // 
             this.menu_Exit.Name = "menu_Exit";
-            this.menu_Exit.Size = new System.Drawing.Size(180, 22);
+            this.menu_Exit.Size = new System.Drawing.Size(143, 22);
             this.menu_Exit.Text = "Exit Program";
             this.menu_Exit.Click += new System.EventHandler(this.menu_Exit_Click);
             // 
@@ -121,8 +118,9 @@ namespace Chat_Server_using_Socket
             // menu_Config
             // 
             this.menu_Config.Name = "menu_Config";
-            this.menu_Config.Size = new System.Drawing.Size(110, 22);
+            this.menu_Config.Size = new System.Drawing.Size(180, 22);
             this.menu_Config.Text = "Config";
+            this.menu_Config.Click += new System.EventHandler(this.menu_Config_Click);
             // 
             // communicationToolStripMenuItem
             // 
@@ -155,9 +153,9 @@ namespace Chat_Server_using_Socket
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sbStatus,
             this.sbIPport});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 397);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 380);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(507, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(299, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -191,69 +189,52 @@ namespace Chat_Server_using_Socket
             this.sendToolStripMenuItem.Text = "Send";
             this.sendToolStripMenuItem.Click += new System.EventHandler(this.sendToolStripMenuItem_Click);
             // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.tbSend);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.tbReceive);
-            this.splitContainer1.Size = new System.Drawing.Size(507, 373);
-            this.splitContainer1.SplitterDistance = 245;
-            this.splitContainer1.TabIndex = 3;
-            // 
             // tbSend
             // 
-            this.tbSend.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSend.ContextMenuStrip = this.cmn_Send;
-            this.tbSend.Location = new System.Drawing.Point(0, 0);
+            this.tbSend.Location = new System.Drawing.Point(3, 312);
             this.tbSend.Multiline = true;
             this.tbSend.Name = "tbSend";
-            this.tbSend.Size = new System.Drawing.Size(242, 373);
+            this.tbSend.Size = new System.Drawing.Size(293, 35);
             this.tbSend.TabIndex = 0;
             this.tbSend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSend_KeyDown);
             // 
             // tbReceive
             // 
-            this.tbReceive.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbReceive.Location = new System.Drawing.Point(-1, 0);
+            this.tbReceive.Location = new System.Drawing.Point(3, 3);
             this.tbReceive.Multiline = true;
             this.tbReceive.Name = "tbReceive";
-            this.tbReceive.Size = new System.Drawing.Size(259, 373);
+            this.tbReceive.Size = new System.Drawing.Size(293, 299);
             this.tbReceive.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.tbReceive);
+            this.panel1.Controls.Add(this.tbSend);
+            this.panel1.Location = new System.Drawing.Point(0, 27);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(299, 351);
+            this.panel1.TabIndex = 2;
             // 
             // Chat_Server_using_Socket
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(507, 419);
-            this.Controls.Add(this.splitContainer1);
+            this.ClientSize = new System.Drawing.Size(299, 402);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Chat_Server_using_Socket";
             this.Text = "Chat Server using Socket";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Chat_Server_using_Socket_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.cmn_Send.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -277,10 +258,10 @@ namespace Chat_Server_using_Socket
         private System.Windows.Forms.ToolStripStatusLabel sbStatus;
         private System.Windows.Forms.ToolStripStatusLabel sbIPport;
         private System.Windows.Forms.ContextMenuStrip cmn_Send;
-        private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TextBox tbSend;
         private System.Windows.Forms.TextBox tbReceive;
         private System.Windows.Forms.ToolStripMenuItem sendToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

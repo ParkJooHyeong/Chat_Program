@@ -26,6 +26,8 @@ namespace Chat_Server_using_Socket
         Thread threadRead = null;
         byte[] IP={192,168,35,94};
         int port_num=8080;
+       // byte[] sAddress = { 0, 0, 0, 0 }; // {127,0,0,1 XXX} :서버에서 Bind하기 위한 포트 어드레스
+
         private void menu_Start_Click(object sender, EventArgs e)
         {
             // Initialize Socket
@@ -39,11 +41,14 @@ namespace Chat_Server_using_Socket
                     threadServer.Abort();
                 if (threadRead != null)
                     threadRead.Abort();
+                if (thsession != null)
+                    thsession.Abort();
                 
                 sockServer.Close();
                 sockServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
-            sbIPport.Text = IP+port_num.ToString();
+            tbReceive.Text += $"Open Server {new IPAddress(IP)}::{port_num}\r\n";
+            sbIPport.Text = port_num.ToString();
             sbStatus.Text = "Running Server";
             sbStatus.BackColor = Color.Blue;
             // Initialize Thread
@@ -59,7 +64,11 @@ namespace Chat_Server_using_Socket
                 threadRead = new Thread(ReadProcess);
                 threadRead.IsBackground = true;
             }
-
+            if (thsession == null)
+            {
+                thsession = new Thread(SessionProcess);
+                thsession.IsBackground = true;
+            }
         }
         bool Pending = false; // 외부로부터의 서버요청 수신.
         IAsyncResult ar;
@@ -77,12 +86,13 @@ namespace Chat_Server_using_Socket
             return sock1;
         }
 
+        Thread thsession = null;
         void ServerProcess()
         {
             IPAddress ip_p = new IPAddress(IP);
             IPEndPoint ep = new IPEndPoint(ip_p, port_num);
             sockServer.Bind(ep);
-            sockServer.Listen(1024 * 50);
+            sockServer.Listen(10);
             IAsyncResult result = sockServer.BeginAccept(new AsyncCallback(onAccept), null);
 
 
@@ -98,6 +108,7 @@ namespace Chat_Server_using_Socket
                     }
                     threadRead = new Thread(ReadProcess);
                     threadRead.Start();
+
                 }
                 Thread.Sleep(100);
                 //socket = sockServer.BeginAccept();   //Create channel(session)
@@ -115,7 +126,7 @@ namespace Chat_Server_using_Socket
                 Invoke(cb, new object[]{ str });
             }
             else 
-                tbReceive.Text += $"[{DateTime.Now.ToString("mm:ss")}] : {str}\r\n";
+                tbReceive.Text += $"{str}\r\n";
         }
 
         void ReadProcess()
@@ -126,7 +137,8 @@ namespace Chat_Server_using_Socket
                 {
                     byte[] receive = new byte[socket.Available];
                     socket.Receive(receive);
-                    AddText(Encoding.Default.GetString(receive));
+                    string timer = System.DateTime.Now.ToString("HH:mm:ss");
+                    AddText($"[수신][{timer}] : {Encoding.Default.GetString(receive)}");
                 }
             }
 
@@ -179,7 +191,67 @@ namespace Chat_Server_using_Socket
             if (e.KeyCode == Keys.Enter)
             {
                 SendText(tbSend.Text);
+                string timer = System.DateTime.Now.ToString("HH:mm:ss");
+                AddText($"[발신][{timer}] : {tbSend.Text}");
+                tbSend.Clear();
             }
+        }
+
+        private void Chat_Server_using_Socket_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
+
+        private void menu_Config_Click(object sender, EventArgs e)
+        {
+            PortSet ps = new PortSet(port_num.ToString());
+            DialogResult result = ps.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string pp = ps.setPort();
+                if (pp != "")
+                {
+                    try
+                    {
+                        int pn = int.Parse(pp);
+                        port_num = pn;
+                    }
+                    catch(Exception e1)
+                    {
+                        MessageBox.Show(e1.ToString());
+
+                    }
+                }
+            }
+            ps.Close();
+        }
+        private byte[] GetIPBytes(string str)
+        {
+            string[] sa = str.Split('.');
+            byte[] ba = new byte[4];
+            if (sa.Length != 4) return null;
+            for (int i = 0; i < 4; i++){
+                ba[i] = byte.Parse(sa[i]);
+            }
+            return ba;
+        }
+
+        void SessionProcess()
+        {
+            while (true)
+            {
+                if( socket!=null&&socket.Connected)
+                {
+                    sbStatus.BackColor = Color.GreenYellow;
+                }
+                else
+                {
+                    sbStatus.BackColor = Color.PaleVioletRed;
+                    socket = null;
+                }
+                Thread.Sleep(100);
+            }
+
         }
     }
 }

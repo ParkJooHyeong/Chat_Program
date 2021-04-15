@@ -52,10 +52,19 @@
     <Compile Include="Chat_Server_using_Socket.Designer.cs">
       <DependentUpon>Chat_Server_using_Socket.cs</DependentUpon>
     </Compile>
+    <Compile Include="PortSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PortSet.Designer.cs">
+      <DependentUpon>PortSet.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Chat_Server_using_Socket.resx">
       <DependentUpon>Chat_Server_using_Socket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PortSet.resx">
+      <DependentUpon>PortSet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
