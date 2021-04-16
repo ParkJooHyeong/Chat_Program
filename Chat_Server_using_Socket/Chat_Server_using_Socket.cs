@@ -26,6 +26,7 @@ namespace Chat_Server_using_Socket
         Thread threadRead = null;
         byte[] IP={192,168,35,94};
         int port_num=8080;
+        List<Socket> socks = new List<Socket>();
        // byte[] sAddress = { 0, 0, 0, 0 }; // {127,0,0,1 XXX} :서버에서 Bind하기 위한 포트 어드레스
 
         private void menu_Start_Click(object sender, EventArgs e)
@@ -41,8 +42,8 @@ namespace Chat_Server_using_Socket
                     threadServer.Abort();
                 if (threadRead != null)
                     threadRead.Abort();
-                if (thsession != null)
-                    thsession.Abort();
+                //if (thsession != null)
+                //    thsession.Abort();
                 
                 sockServer.Close();
                 sockServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -64,11 +65,13 @@ namespace Chat_Server_using_Socket
                 threadRead = new Thread(ReadProcess);
                 threadRead.IsBackground = true;
             }
-            if (thsession == null)
-            {
-                thsession = new Thread(SessionProcess);
-                thsession.IsBackground = true;
-            }
+            //if (thsession == null)
+            //{
+            //    thsession = new Thread(SessionProcess);
+            //    thsession.IsBackground = true;
+            //    thsession.Start();
+
+            //}
         }
         bool Pending = false; // 외부로부터의 서버요청 수신.
         IAsyncResult ar;
@@ -92,7 +95,7 @@ namespace Chat_Server_using_Socket
             IPAddress ip_p = new IPAddress(IP);
             IPEndPoint ep = new IPEndPoint(ip_p, port_num);
             sockServer.Bind(ep);
-            sockServer.Listen(10);
+            sockServer.Listen(10000);
             IAsyncResult result = sockServer.BeginAccept(new AsyncCallback(onAccept), null);
 
 
@@ -140,6 +143,7 @@ namespace Chat_Server_using_Socket
                     string timer = System.DateTime.Now.ToString("HH:mm:ss");
                     AddText($"[수신][{timer}] : {Encoding.Default.GetString(receive)}");
                 }
+                Thread.Sleep(100);
             }
 
         }
@@ -236,19 +240,45 @@ namespace Chat_Server_using_Socket
             return ba;
         }
 
-        void SessionProcess()
+        delegate void cCurrentStatus(Socket sock);
+        void CurrentStatus(Socket sock)
         {
-            while (true)
+            if (sock==null)
             {
-                if( socket!=null&&socket.Connected)
+                cCurrentStatus cb = new cCurrentStatus(CurrentStatus);
+                Invoke(cb,new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp));
+            }
+            else
+            {
+                if(sock.Connected)
                 {
                     sbStatus.BackColor = Color.GreenYellow;
                 }
                 else
                 {
                     sbStatus.BackColor = Color.PaleVioletRed;
-                    socket = null;
+                    sock = null;
                 }
+            }
+
+
+        }
+
+        void SessionProcess()
+        {
+            while (true)
+            {
+                if(socket!=null && socket.Connected)
+                {
+                    ///sbLabelChane
+                }
+                else
+                {
+                    //sbLabelChane
+                    socket = null;
+                    
+                }
+                CurrentStatus(socket);
                 Thread.Sleep(100);
             }
 
