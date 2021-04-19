@@ -29,11 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Chatting));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuStart = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuStop = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuClientStart = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuClientStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuServerConfig = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,23 +46,22 @@
             this.clientConfigToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuClientIP = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuClientPort = new System.Windows.Forms.ToolStripMenuItem();
-            this.communicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Comm = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSendEx = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.sbLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.sbLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.sbLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.sbLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Send = new System.Windows.Forms.ToolStripMenuItem();
             this.tbSend = new System.Windows.Forms.TextBox();
             this.tbReceive = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.sbLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.sbLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.sbLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.mnuClientStart = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuClientStop = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.selectTargetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sbCombo = new System.Windows.Forms.ToolStripDropDownButton();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -70,12 +73,12 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
-            this.communicationToolStripMenuItem,
+            this.menu_Comm,
             this.viewToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(323, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(422, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -114,6 +117,25 @@
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
             // 
+            // mnuClientStart
+            // 
+            this.mnuClientStart.Name = "mnuClientStart";
+            this.mnuClientStart.Size = new System.Drawing.Size(180, 22);
+            this.mnuClientStart.Text = "원격 서버 접속";
+            this.mnuClientStart.Click += new System.EventHandler(this.mnuClientStart_Click);
+            // 
+            // mnuClientStop
+            // 
+            this.mnuClientStop.Name = "mnuClientStop";
+            this.mnuClientStop.Size = new System.Drawing.Size(180, 22);
+            this.mnuClientStop.Text = "접속 종료";
+            this.mnuClientStop.Click += new System.EventHandler(this.mnuClientStop_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
+            // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
@@ -135,20 +157,20 @@
             this.mnuServerIP,
             this.mnuServerPort});
             this.mnuServerConfig.Name = "mnuServerConfig";
-            this.mnuServerConfig.Size = new System.Drawing.Size(147, 22);
+            this.mnuServerConfig.Size = new System.Drawing.Size(180, 22);
             this.mnuServerConfig.Text = "Server Config";
             // 
             // mnuServerIP
             // 
             this.mnuServerIP.Name = "mnuServerIP";
-            this.mnuServerIP.Size = new System.Drawing.Size(133, 22);
+            this.mnuServerIP.Size = new System.Drawing.Size(180, 22);
             this.mnuServerIP.Text = "Server IP";
             this.mnuServerIP.Click += new System.EventHandler(this.mnuServerIP_Click);
             // 
             // mnuServerPort
             // 
             this.mnuServerPort.Name = "mnuServerPort";
-            this.mnuServerPort.Size = new System.Drawing.Size(133, 22);
+            this.mnuServerPort.Size = new System.Drawing.Size(180, 22);
             this.mnuServerPort.Text = "Server Port";
             this.mnuServerPort.Click += new System.EventHandler(this.mnuServerPort_Click);
             // 
@@ -158,35 +180,36 @@
             this.mnuClientIP,
             this.mnuClientPort});
             this.clientConfigToolStripMenuItem.Name = "clientConfigToolStripMenuItem";
-            this.clientConfigToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.clientConfigToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.clientConfigToolStripMenuItem.Text = "Client Config";
             // 
             // mnuClientIP
             // 
             this.mnuClientIP.Name = "mnuClientIP";
-            this.mnuClientIP.Size = new System.Drawing.Size(96, 22);
+            this.mnuClientIP.Size = new System.Drawing.Size(180, 22);
             this.mnuClientIP.Text = "IP";
             this.mnuClientIP.Click += new System.EventHandler(this.mnuClientIP_Click);
             // 
             // mnuClientPort
             // 
             this.mnuClientPort.Name = "mnuClientPort";
-            this.mnuClientPort.Size = new System.Drawing.Size(96, 22);
+            this.mnuClientPort.Size = new System.Drawing.Size(180, 22);
             this.mnuClientPort.Text = "Port";
             this.mnuClientPort.Click += new System.EventHandler(this.mnuClientPort_Click);
             // 
-            // communicationToolStripMenuItem
+            // menu_Comm
             // 
-            this.communicationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuSendEx});
-            this.communicationToolStripMenuItem.Name = "communicationToolStripMenuItem";
-            this.communicationToolStripMenuItem.Size = new System.Drawing.Size(106, 20);
-            this.communicationToolStripMenuItem.Text = "Communication";
+            this.menu_Comm.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuSendEx,
+            this.selectTargetsToolStripMenuItem});
+            this.menu_Comm.Name = "menu_Comm";
+            this.menu_Comm.Size = new System.Drawing.Size(106, 20);
+            this.menu_Comm.Text = "Communication";
             // 
             // mnuSendEx
             // 
             this.mnuSendEx.Name = "mnuSendEx";
-            this.mnuSendEx.Size = new System.Drawing.Size(101, 22);
+            this.mnuSendEx.Size = new System.Drawing.Size(180, 22);
             this.mnuSendEx.Text = "Send";
             // 
             // viewToolStripMenuItem
@@ -207,11 +230,12 @@
             this.sbLabel1,
             this.sbLabel2,
             this.sbLabel3,
-            this.sbLabel4});
+            this.sbLabel4,
+            this.sbCombo});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStrip1.Location = new System.Drawing.Point(0, 526);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 425);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(323, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(422, 24);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -222,55 +246,6 @@
             this.sbLabel1.Name = "sbLabel1";
             this.sbLabel1.Size = new System.Drawing.Size(90, 19);
             this.sbLabel1.DoubleClick += new System.EventHandler(this.sbLabel1_DoubleClick);
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Send});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(102, 26);
-            // 
-            // Send
-            // 
-            this.Send.Name = "Send";
-            this.Send.Size = new System.Drawing.Size(101, 22);
-            this.Send.Text = "Send";
-            this.Send.Click += new System.EventHandler(this.Send_Click);
-            // 
-            // tbSend
-            // 
-            this.tbSend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSend.ContextMenuStrip = this.contextMenuStrip1;
-            this.tbSend.Location = new System.Drawing.Point(3, 388);
-            this.tbSend.Multiline = true;
-            this.tbSend.Name = "tbSend";
-            this.tbSend.Size = new System.Drawing.Size(317, 107);
-            this.tbSend.TabIndex = 1;
-            this.tbSend.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbSend_KeyUp);
-            // 
-            // tbReceive
-            // 
-            this.tbReceive.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbReceive.Location = new System.Drawing.Point(3, 3);
-            this.tbReceive.Multiline = true;
-            this.tbReceive.Name = "tbReceive";
-            this.tbReceive.Size = new System.Drawing.Size(317, 379);
-            this.tbReceive.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.tbReceive);
-            this.panel1.Controls.Add(this.tbSend);
-            this.panel1.Location = new System.Drawing.Point(0, 27);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(323, 498);
-            this.panel1.TabIndex = 2;
             // 
             // sbLabel2
             // 
@@ -296,35 +271,83 @@
             this.sbLabel4.Size = new System.Drawing.Size(50, 19);
             this.sbLabel4.DoubleClick += new System.EventHandler(this.sbLabel4_DoubleClick);
             // 
-            // mnuClientStart
+            // contextMenuStrip1
             // 
-            this.mnuClientStart.Name = "mnuClientStart";
-            this.mnuClientStart.Size = new System.Drawing.Size(180, 22);
-            this.mnuClientStart.Text = "원격 서버 접속";
-            this.mnuClientStart.Click += new System.EventHandler(this.mnuClientStart_Click);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Send});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(102, 26);
             // 
-            // mnuClientStop
+            // Send
             // 
-            this.mnuClientStop.Name = "mnuClientStop";
-            this.mnuClientStop.Size = new System.Drawing.Size(180, 22);
-            this.mnuClientStop.Text = "접속 종료";
-            this.mnuClientStop.Click += new System.EventHandler(this.mnuClientStop_Click);
+            this.Send.Name = "Send";
+            this.Send.Size = new System.Drawing.Size(101, 22);
+            this.Send.Text = "Send";
+            this.Send.Click += new System.EventHandler(this.Send_Click);
             // 
-            // toolStripMenuItem2
+            // tbSend
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
+            this.tbSend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSend.ContextMenuStrip = this.contextMenuStrip1;
+            this.tbSend.Location = new System.Drawing.Point(3, 287);
+            this.tbSend.Multiline = true;
+            this.tbSend.Name = "tbSend";
+            this.tbSend.Size = new System.Drawing.Size(416, 107);
+            this.tbSend.TabIndex = 1;
+            this.tbSend.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbSend_KeyUp);
             // 
-            // frmSocket
+            // tbReceive
+            // 
+            this.tbReceive.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbReceive.Location = new System.Drawing.Point(3, 3);
+            this.tbReceive.Multiline = true;
+            this.tbReceive.Name = "tbReceive";
+            this.tbReceive.Size = new System.Drawing.Size(416, 278);
+            this.tbReceive.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.tbReceive);
+            this.panel1.Controls.Add(this.tbSend);
+            this.panel1.Location = new System.Drawing.Point(0, 27);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(422, 397);
+            this.panel1.TabIndex = 2;
+            // 
+            // selectTargetsToolStripMenuItem
+            // 
+            this.selectTargetsToolStripMenuItem.Name = "selectTargetsToolStripMenuItem";
+            this.selectTargetsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectTargetsToolStripMenuItem.Text = "Select Targets";
+            this.selectTargetsToolStripMenuItem.Click += new System.EventHandler(this.selectTargetsToolStripMenuItem_Click);
+            // 
+            // sbCombo
+            // 
+            this.sbCombo.AutoSize = false;
+            this.sbCombo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.sbCombo.Image = ((System.Drawing.Image)(resources.GetObject("sbCombo.Image")));
+            this.sbCombo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sbCombo.Name = "sbCombo";
+            this.sbCombo.Size = new System.Drawing.Size(100, 22);
+            this.sbCombo.Text = "Channel";
+            this.sbCombo.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.sbCombo_DropDownItemClicked);
+            // 
+            // Chatting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(323, 550);
+            this.ClientSize = new System.Drawing.Size(422, 449);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "frmSocket";
+            this.Name = "Chatting";
             this.Text = "Socket Mamager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSocket_FormClosing);
             this.Load += new System.EventHandler(this.frmSocket_Load);
@@ -350,7 +373,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuExit;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnuServerConfig;
-        private System.Windows.Forms.ToolStripMenuItem communicationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menu_Comm;
         private System.Windows.Forms.ToolStripMenuItem mnuSendEx;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -372,5 +395,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuClientStart;
         private System.Windows.Forms.ToolStripMenuItem mnuClientStop;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem selectTargetsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton sbCombo;
     }
 }

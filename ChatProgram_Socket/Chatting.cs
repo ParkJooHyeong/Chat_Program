@@ -142,8 +142,24 @@ namespace ChatProgram_Socket
             threadSession = new Thread(SessionProcess);
             threadSession.Start();
         }
+        struct st
+        {
+            public Socket sock;
+            public string str;
+            public int erroNo;
+            public st(Socket _sock, string _str, int _errNo)
+            {
+                this.erroNo = _errNo;
+                this.sock = _sock;
+                this.str = _str;
+            }
+            public  void Setst(Socket _sock, string _str, int _errNo)
+            {
 
-        //TcpListener listener;
+            }
+        }
+
+       // List<Socket> sock_list = new List<Socket>();
         void ServerProcess()
         {
             //listener.Start();
@@ -157,10 +173,10 @@ namespace ChatProgram_Socket
             {
                 if (Pending)
                 {
-                    ////if (sock != null) { sock.Close(); }
                     Socket sockT = acceptSocket(); DoRead();
                     socks.Add(sockT);
                     AddText($"Remote EndPoint {sockT.RemoteEndPoint.ToString()} 로부터 접속되었습니다.\r\n");
+                    sbCombo.DropDownItems.Add(sockT.RemoteEndPoint.ToString());
                 }
                 Thread.Sleep(100);
             }
@@ -184,38 +200,76 @@ namespace ChatProgram_Socket
         {
             while (true)
             {
-                foreach (Socket ss in socks)
+                if (IsServerMode)
                 {
-                    sock = ss;
+                    foreach (Socket ss in socks)
+                    {
+                        sock = ss;
+                        if (sock != null && sock.Available > 0)
+                        {
+                            byte[] bArr = new byte[sock.Available]; // 필요한 만큼 배열 선언
+                            sock.Receive(bArr);
+                            string timer = System.DateTime.Now.ToString("HH:mm:ss");
+                            AddText($"[수신{sock.RemoteEndPoint.ToString()}][{timer}]{Encoding.Default.GetString(bArr)}\r\n");
+                        }
+                    }
+                }
+                else
+                {
                     if (sock != null && sock.Available > 0)
                     {
                         byte[] bArr = new byte[sock.Available]; // 필요한 만큼 배열 선언
                         sock.Receive(bArr);
-                        //if (bArr.Length == 1 && bArr[0] == 0) continue;
                         string timer = System.DateTime.Now.ToString("HH:mm:ss");
                         AddText($"[수신{sock.RemoteEndPoint.ToString()}][{timer}]{Encoding.Default.GetString(bArr)}\r\n");
                     }
                 }
                 Thread.Sleep(100);
+
             }
         }
 
         void SendText(string str)
         {
-            if (IsServerMode) sock = socks[0];
-            try
+            if (IsServerMode)
             {
-                sock.Send(Encoding.Default.GetBytes(str));
+                int n = socks.FindIndex((s => s.RemoteEndPoint.ToString() == sbCombo.Text));
+                sock = socks[n];
+                //for(int i = 0; i < socks.Count; i++)
+                //{
+                //    sock = socks[i];
+                //    try
+                //    {
+                //        sock.Send(Encoding.Default.GetBytes(str));
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        AddText($"Remote 와의 연결이 문제가 있습니다.");
+                //        if (sock != null) sock.Close();
+                //        sock = null;
+                //    }
+                //}
                 string timer = System.DateTime.Now.ToString("HH:mm:ss");
                 AddText($"[발신][{timer}]{tbSend.Text}\r\n");
             }
-            catch (Exception e)
+            else
             {
-                AddText($"Remote 와의 연결이 문제가 있습니다.");
-                if (sock != null) sock.Close();
-                sock = null;
+                try
+                {
+                    sock.Send(Encoding.Default.GetBytes(str));
+                    string timer = System.DateTime.Now.ToString("HH:mm:ss");
+                    AddText($"[발신][{timer}]{tbSend.Text}\r\n");
+                }
+                catch (Exception e)
+                {
+                    AddText($"Remote 와의 연결이 문제가 있습니다.");
+                    if (sock != null) sock.Close();
+                    sock = null;
+                }
             }
         }
+
+
 
         private void Send_Click(object sender, EventArgs e)   // PopupMenu - Send (selected Text)
         {
@@ -449,6 +503,17 @@ namespace ChatProgram_Socket
                 }
                 Thread.Sleep(100);
             }
+        }
+
+        private void selectTargetsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Targets tg = new Targets(socks);
+            tg.ShowDialog();
+        }
+
+        private void sbCombo_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            sbCombo.Text = e.ClickedItem.Text;
         }
     }
 }
